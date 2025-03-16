@@ -17,4 +17,4 @@ A simple and user-friendly Todo List application built with React.
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License.
