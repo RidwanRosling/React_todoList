@@ -19,9 +19,10 @@ function Header() {
 
 function InptUser() {
   const [task, setTask] = useState(" ");
-  const [tasks, setTasks] = useState([]); // to save task list
+  const [tasks, setTasks] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
+  const [editValue, setEditValue] = useState("");
 
-  // Tambah task
   const handleSubmit = (e) => {
     e.preventDefault();
     if (task.trim() === "") return;
@@ -31,6 +32,19 @@ function InptUser() {
 
   const deleteButton = (index) => {
     setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  const startEdit = (index) => {
+    setEditIndex(index);
+    setEditValue(tasks[index]);
+  };
+
+  const handleUpdate = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index] = editValue;
+    setTasks(updatedTasks);
+    setEditIndex(null);
+    setEditValue("");
   };
 
   return (
@@ -44,21 +58,51 @@ function InptUser() {
         <button type="submit">Submit</button>
       </form>
 
-      {/* Render daftar tugas */}
       <div>
         {tasks.map((t, index) => (
-          <UserTask key={index} task={t} onDelete={() => deleteButton(index)} />
+          <UserTask
+            key={index}
+            task={t}
+            onDelete={() => deleteButton(index)}
+            onEdit={() => startEdit(index)}
+            isEditing={editIndex === index}
+            editValue={editValue}
+            setEditValue={setEditValue}
+            onUpdate={() => handleUpdate(index)}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function UserTask({ task, onDelete }) {
+function UserTask({
+  task,
+  onDelete,
+  onEdit,
+  isEditing,
+  editValue,
+  setEditValue,
+  onUpdate,
+}) {
   return (
     <div>
-      <p>{task}</p>
-      <button onClick={onDelete}>Delete</button>
+      {isEditing ? (
+        <>
+          <input
+            type="text"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+          />
+          <button onClick={onUpdate}>Simpan</button>
+        </>
+      ) : (
+        <>
+          <p>{task}</p>
+          <button onClick={onDelete}>Delete</button>
+          <button onClick={onEdit}>Update</button>
+        </>
+      )}
     </div>
   );
 }
