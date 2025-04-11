@@ -18,7 +18,7 @@ function Header() {
 }
 
 function InptUser() {
-  const [task, setTask] = useState(" ");
+  const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState("");
@@ -26,7 +26,7 @@ function InptUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (task.trim() === "") return;
-    setTasks([...tasks, task]);
+    setTasks([...tasks, { text: task, done: false }]);
     setTask("");
   };
 
@@ -36,15 +36,21 @@ function InptUser() {
 
   const startEdit = (index) => {
     setEditIndex(index);
-    setEditValue(tasks[index]);
+    setEditValue(tasks[index].text);
   };
 
   const handleUpdate = (index) => {
     const updatedTasks = [...tasks];
-    updatedTasks[index] = editValue;
+    updatedTasks[index].text = editValue;
     setTasks(updatedTasks);
     setEditIndex(null);
     setEditValue("");
+  };
+
+  const toggleDone = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks[index].done = !updatedTasks[index].done;
+    setTasks(updatedTasks);
   };
 
   return (
@@ -69,6 +75,7 @@ function InptUser() {
             editValue={editValue}
             setEditValue={setEditValue}
             onUpdate={() => handleUpdate(index)}
+            onToggleDone={() => toggleDone(index)}
           />
         ))}
       </div>
@@ -84,6 +91,7 @@ function UserTask({
   editValue,
   setEditValue,
   onUpdate,
+  onToggleDone,
 }) {
   return (
     <div>
@@ -98,7 +106,16 @@ function UserTask({
         </>
       ) : (
         <>
-          <p>{task}</p>
+          <input type="checkbox" checked={task.done} onChange={onToggleDone} />
+          <span
+            style={{
+              textDecoration: task.done ? "line-through" : "none",
+              marginLeft: "8px",
+              marginRight: "8px",
+            }}
+          >
+            {task.text}
+          </span>
           <button onClick={onDelete}>Delete</button>
           <button onClick={onEdit}>Update</button>
         </>
