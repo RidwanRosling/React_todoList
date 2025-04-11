@@ -102,7 +102,7 @@ function UserTask({
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
           />
-          <button onClick={onUpdate}>Simpan</button>
+          <button onClick={onUpdate}>Save</button>
         </>
       ) : (
         <>
