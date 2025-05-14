@@ -7,7 +7,6 @@ A simple and user-friendly Todo List application built with React.
 - Add, edit, and delete tasks
 - Mark tasks as completed
 - Filter tasks by status (all, completed, pending)
-- Responsive design
 
 ## Technologies Used
 
